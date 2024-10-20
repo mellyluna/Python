@@ -1,0 +1,41 @@
+# Importar a biblioteca requests para realizar a solicitação HTTP
+import requests
+
+# Função para converter Real para Iene, Dólar e Euro
+def converter_moedas(valor_real):
+    # Usar uma API para pegar a taxa de conversão atual (Exemplo usando uma API fictícia, você pode substituir por uma API real como Open Exchange Rates)
+    api_url = "https://api.exchangerate-api.com/v4/latest/BRL"
+    
+    try:
+        response = requests.get(api_url)
+        data = response.json()
+        
+        # Acessar as taxas de câmbio do Real para Dólar, Iene e Euro
+        taxa_dolar = data['rates']['USD']
+        taxa_iene = data['rates']['JPY']
+        taxa_euro = data['rates']['EUR']
+        
+        # Converter o valor
+        valor_dolar = valor_real * taxa_dolar
+        valor_iene = valor_real * taxa_iene
+        valor_euro = valor_real * taxa_euro
+        
+        return valor_dolar, valor_iene, valor_euro
+    except Exception as e:
+        print(f"Erro ao acessar a API: {e}")
+        return None, None, None
+
+# Solicitar o valor em reais
+valor_real = float(input("Digite o valor em reais (BRL): "))
+
+# Converter para Dólar, Iene e Euro
+valor_dolar, valor_iene, valor_euro = converter_moedas(valor_real)
+
+# Exibir o resultado
+if valor_dolar and valor_iene and valor_euro:
+    print(f"R$ {valor_real} equivalem a:")
+    print(f" $ {valor_dolar:.2f} USD (Dólar)")
+    print(f" ¥ {valor_iene:.2f} JPY (Iene)")
+    print(f" € {valor_euro:.2f} EUR (Euro)")
+else:
+    print("Não foi possível realizar a conversão.")
